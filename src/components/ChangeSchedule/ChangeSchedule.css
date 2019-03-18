@@ -1,0 +1,22 @@
+h1{
+    font-size: 35px !important;
+    
+}
+p{
+    font-size: 20px;
+}
+.des{
+    margin: 1%;
+    border-radius: 8px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#duration{
+    display: none;
+
+}
+
+#timeField {
+text-align: center;
+width: 20% !important;
+}

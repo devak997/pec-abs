@@ -1,0 +1,14 @@
+h1{
+    font-size: 35px !important;
+    
+}
+p{
+    font-size: 20px;
+}
+.des{
+    /* padding: 5%; */
+    /* border: 2px solid  ; */
+    margin: 1%;
+    border-radius: 8px;
+    font-family: 'Times New Roman', Times, serif;
+}
