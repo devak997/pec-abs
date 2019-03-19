@@ -15,7 +15,14 @@ class CurrentSchedule extends Component {
 
     //     });
     // }
-    
+    handleClick = () =>{ 
+        axios.get("http://127.0.0.1:5000/RestoreDefaults").then( res => {
+            let result = res.data.result
+            // this.setState({result: result});
+            console.log(result);
+            window.location.reload();
+        })
+    }
     componentDidMount() {
         axios.get("http://127.0.0.1:5000/currentSchedule").then( res => {
             console.log(res)
@@ -48,15 +55,11 @@ class CurrentSchedule extends Component {
                                 <td>{item.time}</td>
                             </tr>)
                         })}
-                        {/* {this.state.result.map(function(object, i){
-                        return (<tr>
-                            <td>{object.time}</td>
-                        </tr>)
-                        })} */}
                     </tbody>
 
                 </table>
             </div>
+            <button  class="btn btn-primary" onClick={this.handleClick.bind(this)} id="restore">Restore to Default</button>
             </div>
         );
 

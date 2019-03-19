@@ -7,17 +7,26 @@ class ChangeSchedule extends Component {
     constructor(args) {
         super(args);
         this.state = {
-            time: '00:00'
+            time: '00:00',
+            duration: '00:00'
         }
         this.onTimeChange = this.onTimeChange.bind(this);
+        this.onDurationChange = this.onDurationChange.bind(this);
     };
 
     onTimeChange(time) {
         time = time + ":00"
         this.setState({ time });
-        console.log(typeof time);
-        console.log(time);
+        // console.log(typeof time);
+        // console.log(time);
 
+
+    }
+
+    onDurationChange(duration) {
+        this.setState({ duration });
+        // console.log(typeof duration);
+        // console.log(duration);
 
     }
     state = {
@@ -40,14 +49,14 @@ class ChangeSchedule extends Component {
         var d = new Date();
         if (hour[0] < d.getHours()) {
             this.setState({ status: 'Entered time is less than current time' })
-            console.log('time not valid');
+            // console.log('time not valid');
         }
         else if (hour[0] == d.getHours() && (hour[1] <= d.getMinutes())) {
             this.setState({ status: 'Entered time is less than current time' })
-            console.log('time not valid')
+            // console.log('time not valid')
         }
         else {
-            console.log('hi');
+            // console.log('hi');
 
             var bodyFormData = new FormData();
             bodyFormData.append('time', this.state.time);
@@ -59,7 +68,7 @@ class ChangeSchedule extends Component {
                 data: bodyFormData,
                 config: { headers: { 'Content-Type': 'multipart/form-data' } }
             }).then(res => {
-                console.log(res, typeof res);
+                // console.log(res, typeof res);
 
                 if (res.status == 200) {
                     this.setState({ status: 'Data Sent to API successfully' })
@@ -80,6 +89,7 @@ class ChangeSchedule extends Component {
 
     render() {
         const { time } = '00:00:00'
+        const { duration } = '00:00'
         return (
             <div class=" container-fluid">
                 <div className="des">
@@ -91,7 +101,7 @@ class ChangeSchedule extends Component {
                         <div className="form-group">
                             <label for="inputTime">Enter Time</label>
                             <br></br>
-                            <TimeField value={time} onChange={this.onTimeChange} id="timeField" />
+                            <TimeField value={time} onChange={this.onTimeChange} autoComplete="off" id="timeField" />
                         </div>
                         <div className="form-group">
                             <label for="inputReason">Reason</label>
@@ -104,7 +114,8 @@ class ChangeSchedule extends Component {
                         </div>
                         <div class="form-group" id='duration'>
                             <label for="duration">Enter Duration</label>
-                            <input type="text" name="duration" placeholder="Duration" onChange={this.handleDuration} value={this.state.duration} className="form-control" />
+                            <br></br>
+                            <TimeField value={duration} onChange={this.onDurationChange} autoComplete="off" id="timeField" />
                         </div>
                         <button type="submit" class="btn btn-primary" >Submit</button>
                     </form>

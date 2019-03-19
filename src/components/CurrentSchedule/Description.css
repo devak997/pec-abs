@@ -12,3 +12,7 @@ p{
     border-radius: 8px;
     font-family: 'Times New Roman', Times, serif;
 }
+#restore{
+    float: right;
+    margin: 2%;
+}
