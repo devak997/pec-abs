@@ -8,6 +8,10 @@ def getListFromCollection(mylist):
     stringList = list(map(lambda x: x["time"],mylist))
     return stringList
 
+def getReasonFromCollection(mylist):
+    stringList = list(map(lambda x: x["reason"],mylist))
+    return stringList
+
 def getHolidayFromCollection(mylist):
     holidayList = list(map(lambda x: x["Date"],mylist))
     return holidayList
@@ -69,9 +73,13 @@ def restoreDefaults():
 def postData():
     data = request.form
     currentScheduleList = getListFromCollection(list(currentSchedule.find({},{ "time":1,"_id": 0})))
+    reasonList = getReasonFromCollection(list(alertTime.find({},{ "reason":1,"_id": 0})))
     if data["time"] in currentScheduleList:
         print("Time already exist")
         result = {"myStatus":"Time already present in currentSchedule"}
+        return jsonify(result)
+    if '1' in reasonList:
+        result = {"myStatus":"No Bell can be set after End Bell"}
         return jsonify(result)
     else:
         myresult = {"time": data["time"], "reason": data["reason"], "isChecked": False, "duration":data["duration"], "myStatus":"Succesfully updated in database"}
