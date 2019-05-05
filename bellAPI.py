@@ -18,7 +18,7 @@ def getHolidayFromCollection(mylist):
 
 app = Flask(__name__)
 CORS(app)
-MONGO_HOST = "192.168.137.24"
+MONGO_HOST = "127.0.0.1"
 MONGO_PORT = 27017
 MONGO_DB = "test_database"
 MONGO_USER = "deva"
@@ -28,7 +28,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 con = pymongo.MongoClient(MONGO_HOST, MONGO_PORT)
 db = con[MONGO_DB]
-db.authenticate(MONGO_USER, MONGO_PASS)
+# db.authenticate(MONGO_USER, MONGO_PASS)
 
 currentSchedule = db.currentSchedule
 alertTime = db.alertTime
@@ -41,7 +41,8 @@ def getCurrentSchedule():
     output = []
     for entry in currentSchedule.find():
         output.append({ "time": entry['time']})
-    return jsonify({"result": output})
+    tempOutput = sorted(output, key = lambda val: val["time"])
+    return jsonify({"result": tempOutput})
 
 @app.route("/logDetails",methods = ['GET'])
 def getLogDetails():
@@ -82,9 +83,9 @@ def postData():
         result = {"myStatus":"No Bell can be set after End Bell"}
         return jsonify(result)
     else:
+        print("hi")
         myresult = {"time": data["time"], "reason": data["reason"], "isChecked": False, "duration":data["duration"], "myStatus":"Succesfully updated in database"}
         result = myresult.copy()
-        print(myresult)
         alertTime.insert_one(myresult)
         print(jsonify(result))
         return jsonify(result)

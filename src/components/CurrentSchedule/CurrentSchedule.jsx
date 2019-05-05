@@ -19,16 +19,15 @@ class CurrentSchedule extends Component {
         axios.get("http://127.0.0.1:5000/RestoreDefaults").then( res => {
             let result = res.data.result
             // this.setState({result: result});
-            console.log(result);
+            // console.log(result);
             window.location.reload();
         })
     }
     componentDidMount() {
         axios.get("http://127.0.0.1:5000/currentSchedule").then( res => {
-            console.log(res)
             let result = res.data.result
             this.setState({result: result});
-            console.log(result);
+            console.log(res)
         })
     }
 
