@@ -6,7 +6,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 CORS(app)
-MONGO_HOST = "127.0.0.1"
+MONGO_HOST = "192.168.137.24"
 MONGO_PORT = 27017
 MONGO_DB = "test_database"
 MONGO_USER = "deva"

@@ -2,19 +2,30 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import './Description.css'
 class LogDetails extends Component {
+    constructor(args){
+        super(args);
+        this.ip = "raspberrypi.mshome.net";       
+    }
 
     state = {
         result : []
     }
 
     componentDidMount() {
-        axios.get("http://127.0.0.1:5000/logDetails").then( res => {
+        axios.get("http://"+this.ip+":5000/logDetails").then( res => {
             console.log(res)
             let result = res.data.result
             this.setState({result: result});
             console.log(result);
         })
     }
+
+    handleClick = () =>{ 
+        axios.get("http://"+this.ip+":5000/clearLog").then( res => {
+            window.location.reload();
+        })
+    }
+
     render() {
         return (
             <div class=" container-fluid">
@@ -29,7 +40,7 @@ class LogDetails extends Component {
                 <tr>
                     <th>S NO.</th>
                     <th>Time</th>
-                    <th>Reason</th>
+                    {/* <th>Reason</th>6 */}
                 </tr>
                 </thead>
                 <tbody>
@@ -37,13 +48,13 @@ class LogDetails extends Component {
                             return (<tr>
                                 <td>{i+1}</td>
                                 <td>{item.time}</td>
-                                <td>{item.reason}</td>
                             </tr>)
                         })}
                 </tbody>
 
             </table>
         </div>
+        <button  class="btn btn-primary" onClick={this.handleClick.bind(this)} id="restore">Clear Log</button>
         </div>
         );
 

@@ -15,6 +15,7 @@ class AddHoliday extends Component {
             reason:''
         }
         this.dateChange = this.dateChange.bind(this);
+        this.ip = "raspberrypi.mshome.net";
     }
 
 
@@ -33,22 +34,23 @@ class AddHoliday extends Component {
         var bodyFormData = new FormData();
         var day = this.state.startDate.getDate();
         var month = this.state.startDate.getMonth()+1;
+        var year = this.state.startDate.getYear()+1900;
+        // console.log(year);
         if(month<10){
-            var date = day + '-0'+month;     
+            var date = day + '-0'+month+'-'+year;     
         }
-        else{var date = day + '-'+month;}
+        else{ date = day + '-'+month+'-'+year;}
         console.log(date);
         bodyFormData.append('date',date);
         bodyFormData.append('reason',this.state.reason);
         axios({
             method: 'post',
-            url: "http://127.0.0.1:5000/addHoliday",
+            url: "http://"+this.ip+":5000/addHoliday",
             data: bodyFormData,
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         }).then(res => {
-                if (res.status == 200) {
-                    console.log(res);
-                    
+                if (res.status === 200) {
+                // console.log(res);  
                 this.setState({ status: 'Data Sent to API successfully' })
                 this.setState({ status: res.data.myStatus })
             }
@@ -77,7 +79,7 @@ class AddHoliday extends Component {
                             <label for="inputReason">Reason</label>
                             <select name="reasonSelected" id="inputReason" className="form-control" onChange={this.handleChange.bind(this)}>
                                 <option >Select Reason</option>
-                                <option value="Temporary holiday">Temporary Holiday</option>
+                                <option value="Temporary holiday">General Holiday</option>
                                 <option value="Public holiday">Public Holiday</option>
                                 <option value="Regional holiday">Regional Holiday</option>
                             </select>
@@ -85,6 +87,7 @@ class AddHoliday extends Component {
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                     <p>{this.state.status}</p>
+                    
                 </div>
             </div >
         );

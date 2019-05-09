@@ -8,38 +8,27 @@ class ChangeSchedule extends Component {
         super(args);
         this.state = {
             time: '00:00',
-            duration: '00:00'
+            duration: '00:00',
+            reason: '',
+            status: ''
         }
         this.onTimeChange = this.onTimeChange.bind(this);
         this.onDurationChange = this.onDurationChange.bind(this);
+        this.ip = "raspberrypi.mshome.net";
     };
 
     onTimeChange(time) {
         time = time + ":00"
         this.setState({ time });
-        // console.log(typeof time);
-        // console.log(time);
-
-
     }
 
     onDurationChange(duration) {
         this.setState({ duration });
-        // console.log(typeof duration);
-        // console.log(duration);
-
     }
-    state = {
-        time: '',
-        reason: '',
-        duration: '',
-        status: ''
-    }
-
 
     handleChange = (e) => {
         var element = document.getElementById('inputReason').value;
-        document.getElementById('duration').style.display = element == 2 ? 'block' : 'none';
+        document.getElementById('duration').style.display = element === '2' ? 'block' : 'none';
         this.setState({ reason: e.target.value })
     }
 
@@ -48,91 +37,95 @@ class ChangeSchedule extends Component {
         var hour = this.state.time.split(':');
         var min = this.state.duration.split(':')
         var d = new Date();
+        console.log("HAHAHAHHAHAHA"+typeof(hour[0])+":"+typeof(toString(d.getHours())))
         if (hour[0] < d.getHours()) {
             this.setState({ status: 'Entered time is less than current time' })
-            // console.log('time not valid');
         }
-        else if (hour[0] == d.getHours() && (hour[1] <= d.getMinutes())) {
+        else if (parseInt(hour[0]) === d.getHours() && (hour[1] <= d.getMinutes())) {
+            console.log(d.getMinutes())
             this.setState({ status: 'Entered time is less than current time' })
-            // console.log('time not valid')
         }
         else {
-            if (this.state.reason == 1)
-            {
+            if (this.state.reason === '1') {
                 console.log(this.state.reason);
                 var bodyFormData = new FormData();
                 bodyFormData.append('time', this.state.time);
-                bodyFormData.append('reason',this.state.reason);
+                bodyFormData.append('reason', this.state.reason);
                 axios({
                     method: 'post',
-                    url: 'http://127.0.0.1:5000/handleEndBell',
+                    url: 'http://' + this.ip + ':5000/handleEndBell',
                     data: bodyFormData,
                     config: { headers: { 'Content-Type': 'multipart/form-data' } }
                 }).then(res => {
                     // console.log(res, typeof res);
-    
-                    if (res.status == 200) {
+
+                    if (res.status === 200) {
                         this.setState({ status: 'Data Sent to API successfully' })
                         this.setState({ status: res.data.myStatus })
                     }
-    
+
                 })
             }
-            else if (this.state.reason == 2)
-            {
+            else if (this.state.reason === '2') {
                 console.log(this.state.reason);
-                var bodyFormData = new FormData();
+                 bodyFormData = new FormData();
                 bodyFormData.append('time', this.state.time);
-                var extraBell = parseInt(hour[1])+parseInt(min[0]);
-                var newTime;
-                if (extraBell>=60)
-                {
-                    if (extraBell-60<10){ extraBell = "0"+(extraBell-60);console.log(extraBell);}
-                    else{extraBell = extraBell-60;}
-                    if (hour[0]+1<10){hour[0]="0"+hour[0]+1;}
-                    else{hour[0] = "0"+(hour[0])}
-                    newTime = (parseInt(hour[0])+1)+":"+(extraBell)+":00";
-                    bodyFormData.append('extraTime',newTime);
+                
+                if (min[0] === "00" && min[1] === "00") {
+                    console.log("lan");
+                    this.setState({ status: "Sorry!! Duration can not be zero." })
                 }
-                if (extraBell<60)
-                {
-                    newTime = hour[0]+":"+extraBell+":00";
-                    bodyFormData.append('extraTime',newTime);
+                else {
+                    var extraBell = parseInt(hour[1]) + parseInt(min[0]);
+                    console.log("ex"+extraBell);
+                    var newTime;
+                    if (extraBell >= 60) {
+                        if (extraBell - 60 < 10) { extraBell = "0" + (extraBell - 60); }
+                        else { extraBell = extraBell - 60; }
+                        if (hour[0] + 1 < 10) { hour[0] = "0" + hour[0] + 1; }
+                        else { hour[0] = "0" + (hour[0]) }
+                        newTime = (parseInt(hour[0]) + 1) + ":" + (extraBell) + ":"+min[1];
+                        console.log(newTime);
+                        bodyFormData.append('extraTime', newTime);
+                    }
+                    else if (extraBell < 60) {
+                        console.log("<60");
+                        if(extraBell<10){extraBell = "0"+extraBell}
+                        newTime = hour[0] + ":" + extraBell +":"+ min[1];
+                        console.log(newTime);
+                        bodyFormData.append('extraTime', newTime);
+                    }
+                    axios({
+                        method: 'post',
+                        url: 'http://' + this.ip + ':5000/handleMiddleBell',
+                        data: bodyFormData,
+                        config: { headers: { 'Content-Type': 'multipart/form-data' } }
+                    }).then(res => {
+                        if (res.status === 200) {
+                            this.setState({ status: 'Data Sent to API successfully' })
+                            this.setState({ status: res.data.myStatus })
+                        }
+
+                    })
                 }
-                // bodyFormData.append('extraBell', extraBell)
+            }
+            else if (this.state.reason === '3') {
+                console.log(this.state.reason);
+                 bodyFormData = new FormData();
+                bodyFormData.append('time', this.state.time);
                 axios({
                     method: 'post',
-                    url: 'http://127.0.0.1:5000/handleMiddleBell',
+                    url: 'http://' + this.ip + ':5000/handleExtraBell',
                     data: bodyFormData,
                     config: { headers: { 'Content-Type': 'multipart/form-data' } }
                 }).then(res => {
-                    // console.log(res, typeof res);
-    
-                    if (res.status == 200) {
+                    if (res.status === 200) {
                         this.setState({ status: 'Data Sent to API successfully' })
                         this.setState({ status: res.data.myStatus })
                     }
-    
+
                 })
             }
-            else if (this.state.reason == 3)
-            {
-                console.log(this.state.reason);
-                var bodyFormData = new FormData();
-                bodyFormData.append('time', this.state.time);
-                axios({
-                    method: 'post',
-                    url: 'http://127.0.0.1:5000/handleExtraBell',
-                    data: bodyFormData,
-                    config: { headers: { 'Content-Type': 'multipart/form-data' } }
-                }).then(res => {
-                    if (res.status == 200) {
-                        this.setState({ status: 'Data Sent to API successfully' })
-                        this.setState({ status: res.data.myStatus })
-                    }
-    
-                })
-            }            
         }
     }
 
@@ -158,7 +151,7 @@ class ChangeSchedule extends Component {
                         <div className="form-group">
                             <label for="inputTime">Enter Time</label>
                             <br></br>
-                            <TimeField value={time} onChange={this.onTimeChange} title = "Enter Time in 24 Hour Format" autoComplete="off" id="timeField" />
+                            <TimeField value={time} onChange={this.onTimeChange} title="Enter Time in 24 Hour Format" autoComplete="off" id="timeField" />
                         </div>
                         <div className="form-group">
                             <label for="inputReason">Reason</label>
@@ -170,7 +163,7 @@ class ChangeSchedule extends Component {
                             </select>
                         </div>
                         <div class="form-group" id='duration'>
-                            <label for="duration">Enter Duration</label>
+                            <label htmlFor="duration">Enter Duration</label>
                             <br></br>
                             <TimeField value={duration} onChange={this.onDurationChange} autoComplete="off" id="timeField" />
                         </div>

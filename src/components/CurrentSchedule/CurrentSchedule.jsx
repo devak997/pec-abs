@@ -2,29 +2,23 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import './Description.css'
 class CurrentSchedule extends Component {
+    
+    constructor(args){
+        super(args);
+        this.ip = "raspberrypi.mshome.net";
+    }
 
     state = {
         result : []
     }
 
-    // tableMapping = () => {
-    //     return this.state.result.map(item => {
-    //        return (<div><tr>{item.time}</tr>
-    //        <tr>{item.time}</tr>
-    //        </div>
-
-    //     });
-    // }
     handleClick = () =>{ 
-        axios.get("http://127.0.0.1:5000/RestoreDefaults").then( res => {
-            let result = res.data.result
-            // this.setState({result: result});
-            // console.log(result);
+        axios.get("http://"+this.ip+":5000/RestoreDefaults").then( res => {
             window.location.reload();
         })
     }
     componentDidMount() {
-        axios.get("http://127.0.0.1:5000/currentSchedule").then( res => {
+        axios.get("http://"+this.ip+":5000/currentSchedule").then( res => {
             let result = res.data.result
             this.setState({result: result});
             console.log(res)
@@ -45,6 +39,7 @@ class CurrentSchedule extends Component {
                     <tr>
                         <th>S NO.</th>
                         <th>Time</th>
+                        <th>Status</th>
                     </tr>
                     </thead> 
                     <tbody>
@@ -52,6 +47,7 @@ class CurrentSchedule extends Component {
                             return (<tr>
                                 <td>{i+1}</td>
                                 <td>{item.time}</td>
+                                <td>{item.status}</td>
                             </tr>)
                         })}
                     </tbody>

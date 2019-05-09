@@ -4,7 +4,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import './Description.css'
-import { ENGINE_METHOD_PKEY_ASN1_METHS } from 'constants';
 class DeleteHoliday extends Component {
     constructor(args) {
         super(args);
@@ -13,6 +12,7 @@ class DeleteHoliday extends Component {
             status:''
         }
         this.dateChange = this.dateChange.bind(this);
+        this.ip = "raspberrypi.mshome.net";
     }
 
 
@@ -36,19 +36,19 @@ class DeleteHoliday extends Component {
         if(month<10){
             var date = day + '-0'+month;     
         }
-        else{var date = day + '-'+month;}
-        var bodyFormData = new FormData();
+        else{ date = day + '-'+month;}
+        bodyFormData = new FormData();
         console.log(date);
         bodyFormData.append('date', date);
         axios({
             method: 'post',
-            url: "http://127.0.0.1:5000/deleteHoliday",
+            url: "http://"+this.ip+":5000/deleteHoliday",
             data: bodyFormData,
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         }).then(res => {
             console.log(res.data.myStatus);
             
-                if (res.status == 200) {
+                if (res.status === 200) {
                 this.setState({ status: res.data.myStatus })
             }
 
