@@ -16,3 +16,7 @@ p{
     float: right;
     margin: 2%;
 }
+#clear{
+    float: left;
+    margin: 2%;
+}

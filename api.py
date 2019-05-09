@@ -135,6 +135,11 @@ def deleteHoliday():
     holidayData.remove(myresult)
     return jsonify(result)
 
+@app.route("/clearSchedule", methods = ['GET'])
+def clearSchedule():
+    currentSchedule.drop()
+    return 'cleared schedule'
+
 @app.route("/RestoreDefaults", methods = ['GET'])
 def restoreDefaults():
     currentSchedule.drop()

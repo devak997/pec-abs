@@ -17,6 +17,13 @@ class CurrentSchedule extends Component {
             window.location.reload();
         })
     }
+
+    handleClear = () =>{ 
+        axios.get("http://"+this.ip+":5000/clearSchedule").then( res => {
+            window.location.reload();
+        })
+    }
+
     componentDidMount() {
         axios.get("http://"+this.ip+":5000/currentSchedule").then( res => {
             let result = res.data.result
@@ -55,6 +62,7 @@ class CurrentSchedule extends Component {
                 </table>
             </div>
             <button  class="btn btn-primary" onClick={this.handleClick.bind(this)} id="restore">Restore to Default</button>
+            <button  class="btn btn-primary"  onClick={this.handleClear.bind(this)} id="clear">Clear Schedule</button>
             </div>
         );
 
