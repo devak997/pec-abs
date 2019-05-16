@@ -15,7 +15,7 @@ class AddHoliday extends Component {
             reason:''
         }
         this.dateChange = this.dateChange.bind(this);
-        this.ip = "raspberrypi.mshome.net";
+        this.ip = "raspberrypi.mshome.net:8000";
     }
 
 
@@ -45,7 +45,7 @@ class AddHoliday extends Component {
         bodyFormData.append('reason',this.state.reason);
         axios({
             method: 'post',
-            url: "http://"+this.ip+":5000/addHoliday",
+            url: "http://"+this.ip+"/addHoliday",
             data: bodyFormData,
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         }).then(res => {

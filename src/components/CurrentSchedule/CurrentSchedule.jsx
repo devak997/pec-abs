@@ -5,7 +5,7 @@ class CurrentSchedule extends Component {
     
     constructor(args){
         super(args);
-        this.ip = "raspberrypi.mshome.net";
+        this.ip = "raspberrypi.mshome.net:8000";
     }
 
     state = {
@@ -13,22 +13,22 @@ class CurrentSchedule extends Component {
     }
 
     handleClick = () =>{ 
-        axios.get("http://"+this.ip+":5000/RestoreDefaults").then( res => {
+        axios.get("http://"+this.ip+"/RestoreDefaults").then( res => {
             window.location.reload();
         })
     }
 
     handleClear = () =>{ 
-        axios.get("http://"+this.ip+":5000/clearSchedule").then( res => {
+        axios.get("http://"+this.ip+"/clearSchedule").then( res => {
             window.location.reload();
         })
     }
 
     componentDidMount() {
-        axios.get("http://"+this.ip+":5000/currentSchedule").then( res => {
-            let result = res.data.result
+        axios.get("http://"+this.ip+"/currentSchedule").then( res => {
+            let result = res.data.result;
             this.setState({result: result});
-            console.log(res)
+            console.log(result)
         })
     }
 

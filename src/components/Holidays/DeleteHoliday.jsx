@@ -12,7 +12,7 @@ class DeleteHoliday extends Component {
             status:''
         }
         this.dateChange = this.dateChange.bind(this);
-        this.ip = "raspberrypi.mshome.net";
+        this.ip = "raspberrypi.mshome.net:8000";
     }
 
 
@@ -42,7 +42,7 @@ class DeleteHoliday extends Component {
         bodyFormData.append('date', date);
         axios({
             method: 'post',
-            url: "http://"+this.ip+":5000/deleteHoliday",
+            url: "http://"+this.ip+"/deleteHoliday",
             data: bodyFormData,
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         }).then(res => {

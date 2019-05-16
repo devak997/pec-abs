@@ -4,7 +4,7 @@ import './Description.css'
 class LogDetails extends Component {
     constructor(args){
         super(args);
-        this.ip = "raspberrypi.mshome.net";       
+        this.ip = "raspberrypi.mshome.net:8000";       
     }
 
     state = {
@@ -12,7 +12,7 @@ class LogDetails extends Component {
     }
 
     componentDidMount() {
-        axios.get("http://"+this.ip+":5000/logDetails").then( res => {
+        axios.get("http://"+this.ip+"/logDetails").then( res => {
             console.log(res)
             let result = res.data.result
             this.setState({result: result});
@@ -21,7 +21,7 @@ class LogDetails extends Component {
     }
 
     handleClick = () =>{ 
-        axios.get("http://"+this.ip+":5000/clearLog").then( res => {
+        axios.get("http://"+this.ip+"/clearLog").then( res => {
             window.location.reload();
         })
     }

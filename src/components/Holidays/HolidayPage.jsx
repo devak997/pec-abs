@@ -6,7 +6,7 @@ class HolidayPage extends Component {
 
     constructor(args){
         super(args);
-        this.ip = "raspberrypi.mshome.net";
+        this.ip = "raspberrypi.mshome.net:8000";
     }
     state = {
         result : []
@@ -14,7 +14,7 @@ class HolidayPage extends Component {
 
     
     componentDidMount() {
-        axios.get("http://"+this.ip+":5000/holidayList").then( res => {
+        axios.get("http://"+this.ip+"/holidayList").then( res => {
             console.log(res)
             let result = res.data.result
             this.setState({result: result});

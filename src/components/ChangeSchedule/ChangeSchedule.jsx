@@ -14,7 +14,7 @@ class ChangeSchedule extends Component {
         }
         this.onTimeChange = this.onTimeChange.bind(this);
         this.onDurationChange = this.onDurationChange.bind(this);
-        this.ip = "raspberrypi.mshome.net";
+        this.ip = "raspberrypi.mshome.net:8000";
     };
 
     onTimeChange(time) {
@@ -53,7 +53,7 @@ class ChangeSchedule extends Component {
                 bodyFormData.append('reason', this.state.reason);
                 axios({
                     method: 'post',
-                    url: 'http://' + this.ip + ':5000/handleEndBell',
+                    url: 'http://' + this.ip + '/handleEndBell',
                     data: bodyFormData,
                     config: { headers: { 'Content-Type': 'multipart/form-data' } }
                 }).then(res => {
@@ -97,7 +97,7 @@ class ChangeSchedule extends Component {
                     }
                     axios({
                         method: 'post',
-                        url: 'http://' + this.ip + ':5000/handleMiddleBell',
+                        url: 'http://' + this.ip + '/handleMiddleBell',
                         data: bodyFormData,
                         config: { headers: { 'Content-Type': 'multipart/form-data' } }
                     }).then(res => {
@@ -115,7 +115,7 @@ class ChangeSchedule extends Component {
                 bodyFormData.append('time', this.state.time);
                 axios({
                     method: 'post',
-                    url: 'http://' + this.ip + ':5000/handleExtraBell',
+                    url: 'http://' + this.ip + '/handleExtraBell',
                     data: bodyFormData,
                     config: { headers: { 'Content-Type': 'multipart/form-data' } }
                 }).then(res => {
